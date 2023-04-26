@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
+use Illuminate\Support\Str;
 
 class ProjectController extends Controller
 {
@@ -38,7 +40,17 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        $new_project = new Project();
+
+        $new_project->fill($data);
+
+        $new_project->slug = Str::of($data['title'])->slug();
+
+        $new_project->save();
+
+        return to_route('projects.show', $new_project->slug);
     }
 
     /**
@@ -60,7 +72,7 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        return view('projects.edit');
+        return view('projects.edit',compact('project'));
     }
 
     /**
@@ -72,7 +84,11 @@ class ProjectController extends Controller
      */
     public function update(UpdateProjectRequest $request, Project $project)
     {
-        //
+        $data = $request->validated();
+
+        $project->update($data);
+
+        return to_route('projects.show', $project->slug);
     }
 
     /**
@@ -83,6 +99,17 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        //
+        if ($project->trashed()) {
+            $project->forceDelete();
+        }
+
+        $project->delete();
+
+        return to_route('projects.index');
+    }
+
+    public function delete(Project $project)
+    {
+        return view('projects.delete', compact('project'));
     }
 }

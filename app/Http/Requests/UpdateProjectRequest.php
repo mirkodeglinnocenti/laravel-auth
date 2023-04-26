@@ -13,7 +13,7 @@ class UpdateProjectRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,9 @@ class UpdateProjectRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'title' => 'required|unique:projects,title|string|max:150|min:6',
+            'description' => 'required|min:10|string',
+            'url' => 'nullable|url'
         ];
     }
 }

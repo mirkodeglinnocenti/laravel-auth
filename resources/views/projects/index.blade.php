@@ -34,8 +34,8 @@
                     <td>{{ $project->url }}</td>
                     <td>
                         <div class="d-flex gap-2 align-items-center">
-                            <a href="{{ route('projects.edit', $project)}}" class="btn btn-sm btn-primary">Modifica</a>
-                            <a href="#" class="btn btn-sm btn-danger">Elimina</a>
+                            <a href="{{ route('projects.edit', $project->slug)}}" class="btn btn-sm btn-primary">Modifica</a>
+                            <a href="{{ route('projects.delete', $project) }}" class="btn btn-sm btn-danger">Elimina</a>
                         </div>
                     </td>
                 </tr>
